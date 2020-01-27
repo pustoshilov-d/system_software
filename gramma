@@ -1,0 +1,52 @@
+Терминалы:
+ASSIGN_OP ? "^=$"
+VAR ? "^[a-zA-Z][a-zA-Z0-9]*$"
+OP ? "^ + | - | * | /$"
+DIGIT ? "^ 0 | ([1-9]{1}[0-9]*)$"
+L_B ? "^($"
+R_B ? "^)$"
+WHILE_KW ? "^while $"
+DO_KW ? "^do $"
+PRINT_KW ? "^print $"
+LOGICAL_OP ? "^>|<|>=|<=|==|!=$"
+COMMA ? "^;$"
+COM ? "^,$"
+IF_KW ? "^if$"
+ELSE_KW ? "^else $"
+FOR_KW ? "^for $"
+L_QB ? "^ {$"
+R_QB ? "^}$"
+HASHSET_ADD  ? "^HASHSET_ADD$"
+HASHSET_CONTAINS ? "^HASHSET_CONTAINS$"
+HASHSET_REMOVE ? "^HASHSET_REMOVE  $"
+HASHSET_COUNT ? "^HASHSET_ADD$"
+LIST_ADD ? "^LIST_ADD$"
+LIST_CONTAINS ? "^LIST_CONTAINS$"
+LIST_REMOVE ? "^LIST_REMOVE  $"
+LIST_COUNT ? "^LIST_ADD$"
+COMMENT ? "^\\/\\/.+$"
+CH_SPACE ? "^ $"
+CH_LEFTLINE ? "^\n$"
+CH_NEWLINE ? "^LIST_ADD$"
+CH_TAB ? "^\t$"
+
+Нетерминалы:
+lang ? expr*
+expr ? assing_expr | cycle_expr | if_expr_OR_ifelse_expr | print_expr | command_hash_expr | command_list_expr | print_expr
+print_expr ? PRINT_KW L_B b_val_expr R_B
+assign_expr ? VAR ASSIGN_OP b_val_expr
+b_val_expr ? stmt | (L_B stmt R_B)
+stmt ? value (OP value)* | command_hash_expr | command_list_expr
+value ? VAR | DIGIT | b_val_expr
+cycle_expr ? while_expr | for_expr | do_while_expr
+while_expr ? WHILE_KW condition body
+do_while_expr ? DO_KW body WHILE_KW condition
+condition ? value LOGICAL_OP value
+body ? L_QB lang R_QB
+for_expr ? FOR_KW L_B assign_expr COMMA for_condition COMMA assign_expr R_B body
+for_condition ? value LOGICAL_OP value
+if_expr_OR_ifelse_expr ? ifelse_expr | if_expr
+ifelse_expr? IF_KW condition body ELSE_KW body
+if_expr ? IF_KW condition body
+command_hash_expr ? HASHSET_ADD value | HASHSET_CONTAINS value | HASHSET_REMOVE value | HASHSET_COUNT
+command_list_expr ? LIST_ADD value | LIST_CONTAINS value | LIST_REMOVE value | LIST_COUNT
